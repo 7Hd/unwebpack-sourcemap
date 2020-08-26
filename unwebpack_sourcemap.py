@@ -182,7 +182,7 @@ class SourceMapExtractor(object):
                 if write_path is not None:
                     os.makedirs(os.path.dirname(write_path), mode=0o755, exist_ok=True)
                     with open(write_path, 'w', encoding="utf-8") as f:
-                        print("Writing %s..." % os.path.basename(write_path))
+                        print("Writing %s..." % (write_path))
                         f.write(content)
             else:
                 break
@@ -210,6 +210,7 @@ class SourceMapExtractor(object):
     def _get_remote_data(self, uri):
         """Get remote data via http."""
         result = requests.get(uri)
+        result.encoding = "utf-8"
 
         if result.status_code == 200:
             return result.text
@@ -254,7 +255,7 @@ class PathSanitiser(object):
         test_filename = "".join(ch for ch in potential_file_path_name if ch in valid_chars)
         if len(test_filename) == 0:
             # Replace empty file name or file path part with the following
-            valid_filename = self.EMPTY_NAME + '_' + str(self.empty_idx)
+            valid_filename = self.EMPTY_NAME
             self.empty_idx += 1
         return valid_filename
 
